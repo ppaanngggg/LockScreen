@@ -4,7 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView android:text="@string/hello_world"
+    <TextView
+        android:id="@+id/text"
+        android:text="@string/hello_world"
         android:layout_width="wrap_content"
         android:layout_height="0sp"
         android:layout_gravity="center"
@@ -27,17 +29,22 @@
                 android:text="@string/num_1"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:background="#00000000"/>
             <Button
                 android:id="@+id/num_2"
                 android:text="@string/num_2"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:background="#00000000"/>
             <Button
+                android:id="@+id/num_3"
+                android:text="@string/num_3"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:background="#00000000"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -45,17 +52,26 @@
             android:layout_weight="1"
             android:gravity="center">
             <Button
+                android:id="@+id/num_4"
+                android:text="@string/num_4"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:background="#00000000"/>
             <Button
+                android:id="@+id/num_5"
+                android:text="@string/num_5"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:background="#00000000"/>
             <Button
+                android:id="@+id/num_6"
+                android:text="@string/num_6"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:background="#00000000"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -63,17 +79,39 @@
             android:layout_weight="1"
             android:gravity="center">
             <Button
+                android:id="@+id/num_7"
+                android:text="@string/num_7"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:background="#00000000"/>
             <Button
+                android:id="@+id/num_8"
+                android:text="@string/num_8"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:background="#00000000"/>
             <Button
+                android:id="@+id/num_9"
+                android:text="@string/num_9"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:background="#00000000"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0sp"
+            android:layout_weight="1"
+            android:gravity="center">
+            <Button
+                android:id="@+id/num_0"
+                android:text="@string/num_0"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#00000000"/>
         </LinearLayout>
 
 
