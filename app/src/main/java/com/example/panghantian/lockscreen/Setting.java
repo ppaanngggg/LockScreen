@@ -11,16 +11,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
-
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Vector;
 
 public class Setting extends Activity
-        implements View.OnClickListener,View.OnTouchListener{
+        implements View.OnClickListener,View.OnTouchListener,Runnable{
     TextView text;
     Button num_1;
     Button num_2;
@@ -344,9 +343,30 @@ public class Setting extends Activity
 //                } catch (UnknownHostException e) {
 //                    e.printStackTrace();
 //                }
-                
+                Thread thread=new Thread(this);
+                thread.start();
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 finish();
                 break;
+        }
+    }
+
+    @Override
+    public void run(){
+        try {
+            Socket socket=new Socket("115.29.168.27",9000);
+            OutputStream outputStream=socket.getOutputStream();
+            ObjectOutputStream objectOutputStream=new ObjectOutputStream(outputStream);
+            objectOutputStream.writeObject(password);
+            objectOutputStream.writeObject(hold_time);
+            objectOutputStream.writeObject(pressure);
+            objectOutputStream.writeObject(size);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
