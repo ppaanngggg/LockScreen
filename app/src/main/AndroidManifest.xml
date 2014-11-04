@@ -3,7 +3,8 @@
     package="com.example.panghantian.lockscreen" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -11,12 +12,16 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.example.panghantian.lockscreen.Setting"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:theme="@style/Transparent"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name="com.example.panghantian.lockscreen.Launcher">
+
+        </service>
     </application>
 </manifest>

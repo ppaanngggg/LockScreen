@@ -1,6 +1,7 @@
 package com.example.panghantian.lockscreen;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -74,8 +76,9 @@ public class Setting extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_setting);
-
+        startService(new Intent(Setting.this,Launcher.class));
         name=(EditText)findViewById(R.id.name);
         text=(TextView)findViewById(R.id.text);
         num_1=(Button)findViewById(R.id.num_1);
