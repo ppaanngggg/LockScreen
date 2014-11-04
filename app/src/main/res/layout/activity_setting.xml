@@ -4,19 +4,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <EditText
+        android:id="@+id/name"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="0sp"
+        android:layout_weight="1"
+        android:hint="@string/name"/>
     <TextView
         android:id="@+id/text"
-        android:text="@string/hello_world"
+        android:text="@string/hint"
         android:layout_width="wrap_content"
         android:layout_height="0sp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_weight="1"
-        android:textSize="30sp"/>
+        android:layout_weight="2"
+        android:textSize="40sp"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="0sp"
-        android:layout_weight="2"
+        android:layout_weight="5"
         android:layout_gravity="center"
         android:orientation="vertical">
         <LinearLayout
@@ -29,8 +36,9 @@
                 android:text="@string/num_1"
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="25sp"
+                android:layout_weight="2"
+                android:textSize="40sp"
+                android:padding="0sp"
                 android:background="#00000000"/>
             <Button
                 android:id="@+id/num_2"
@@ -38,7 +46,9 @@
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="25sp"
+                android:textSize="40sp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:background="#00000000"/>
             <Button
                 android:id="@+id/num_3"
@@ -46,7 +56,7 @@
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="25sp"
+                android:textSize="40sp"
                 android:background="#00000000"/>
         </LinearLayout>
         <LinearLayout
@@ -60,7 +70,7 @@
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="25sp"
+                android:textSize="40sp"
                 android:background="#00000000"/>
             <Button
                 android:id="@+id/num_5"
@@ -68,7 +78,9 @@
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="25sp"
+                android:textSize="40sp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:background="#00000000"/>
             <Button
                 android:id="@+id/num_6"
@@ -76,7 +88,7 @@
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="25sp"
+                android:textSize="40sp"
                 android:background="#00000000"/>
         </LinearLayout>
         <LinearLayout
@@ -90,7 +102,7 @@
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="25sp"
+                android:textSize="40sp"
                 android:background="#00000000"/>
             <Button
                 android:id="@+id/num_8"
@@ -98,7 +110,9 @@
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="25sp"
+                android:textSize="40sp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:background="#00000000"/>
             <Button
                 android:id="@+id/num_9"
@@ -106,7 +120,7 @@
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="25sp"
+                android:textSize="40sp"
                 android:background="#00000000"/>
         </LinearLayout>
         <LinearLayout
@@ -120,7 +134,7 @@
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="25sp"
+                android:textSize="30sp"
                 android:background="#00000000"/>
             <Button
                 android:id="@+id/num_0"
@@ -128,7 +142,9 @@
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="25sp"
+                android:textSize="40sp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:background="#00000000"/>
             <Button
                 android:id="@+id/ok"
@@ -136,7 +152,7 @@
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="25sp"
+                android:textSize="30sp"
                 android:background="#00000000"/>
         </LinearLayout>
 

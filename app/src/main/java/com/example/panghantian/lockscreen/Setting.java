@@ -9,7 +9,9 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -20,6 +22,7 @@ import java.util.Vector;
 
 public class Setting extends Activity
         implements View.OnClickListener,View.OnTouchListener,Runnable{
+    EditText name;
     TextView text;
     Button num_1;
     Button num_2;
@@ -72,6 +75,8 @@ public class Setting extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
+        name=(EditText)findViewById(R.id.name);
         text=(TextView)findViewById(R.id.text);
         num_1=(Button)findViewById(R.id.num_1);
         num_2=(Button)findViewById(R.id.num_2);
@@ -330,19 +335,6 @@ public class Setting extends Activity
                 size=new Vector<Vector<Float>>();
                 break;
             case R.id.ok:
-//                try {
-//                    MongoClient mongoClient=new MongoClient("115.29.168.27",27017);
-//                    DB db=mongoClient.getDB("android_touch");
-//                    DBCollection coll=db.getCollection("data");
-//                    BasicDBObject doc=new BasicDBObject("password",password)
-//                            .append("hold_time",hold_time)
-//                            .append("pressure",pressure)
-//                            .append("size",size);
-//                    coll.insert(doc);
-//                    mongoClient.close();
-//                } catch (UnknownHostException e) {
-//                    e.printStackTrace();
-//                }
                 Thread thread=new Thread(this);
                 thread.start();
                 try {
@@ -350,7 +342,11 @@ public class Setting extends Activity
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                finish();
+                text.setText(password="");
+                hold_time=new Vector<Long>();
+                pressure=new Vector<Vector<Float>>();
+                size=new Vector<Vector<Float>>();
+                Toast.makeText(getApplicationContext(),"upload !",Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -361,6 +357,7 @@ public class Setting extends Activity
             Socket socket=new Socket("115.29.168.27",9000);
             OutputStream outputStream=socket.getOutputStream();
             ObjectOutputStream objectOutputStream=new ObjectOutputStream(outputStream);
+            objectOutputStream.writeObject(name.getText().toString());
             objectOutputStream.writeObject(password);
             objectOutputStream.writeObject(hold_time);
             objectOutputStream.writeObject(pressure);

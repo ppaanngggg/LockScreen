@@ -2,8 +2,9 @@
 <resources>
 
     <string name="app_name">LockScreen</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="hint">password</string>
     <string name="action_settings">Settings</string>
+    <string name="name">name</string>
 
     <string name="num_1">1</string>
     <string name="num_2">2</string>
