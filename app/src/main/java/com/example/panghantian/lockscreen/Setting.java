@@ -1,7 +1,11 @@
 package com.example.panghantian.lockscreen;
 
 import android.app.Activity;
+import android.app.WallpaperManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -76,10 +80,10 @@ public class Setting extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_setting);
         startService(new Intent(Setting.this,Launcher.class));
-        name=(EditText)findViewById(R.id.name);
+//        name=(EditText)findViewById(R.id.name);
         text=(TextView)findViewById(R.id.text);
         num_1=(Button)findViewById(R.id.num_1);
         num_2=(Button)findViewById(R.id.num_2);
@@ -118,6 +122,15 @@ public class Setting extends Activity
         num_9.setOnTouchListener(this);
         num_0.setOnTouchListener(this);
     }
+
+//    @Override
+//    public void onResume(){
+//        super.onResume();
+//        WallpaperManager wallpaperManager=WallpaperManager.getInstance(getApplicationContext());
+//        Drawable drawable=wallpaperManager.getDrawable();
+//        Bitmap bitmap=((BitmapDrawable) drawable).getBitmap();
+//        wallpaperManager.
+//    }
 
 
     @Override
@@ -338,18 +351,19 @@ public class Setting extends Activity
                 size=new Vector<Vector<Float>>();
                 break;
             case R.id.ok:
-                Thread thread=new Thread(this);
-                thread.start();
-                try {
-                    thread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                text.setText(password="");
-                hold_time=new Vector<Long>();
-                pressure=new Vector<Vector<Float>>();
-                size=new Vector<Vector<Float>>();
-                Toast.makeText(getApplicationContext(),"upload !",Toast.LENGTH_SHORT).show();
+//                Thread thread=new Thread(this);
+//                thread.start();
+//                try {
+//                    thread.join();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                text.setText(password="");
+//                hold_time=new Vector<Long>();
+//                pressure=new Vector<Vector<Float>>();
+//                size=new Vector<Vector<Float>>();
+//                Toast.makeText(getApplicationContext(),"upload !",Toast.LENGTH_SHORT).show();
+                finish();
                 break;
         }
     }
