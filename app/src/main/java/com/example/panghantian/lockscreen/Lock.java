@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -11,17 +12,20 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.util.EncodingUtils;
+
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Vector;
 
-public class Setting extends Activity
+public class Lock extends Activity
         implements View.OnClickListener,View.OnTouchListener{
-    int count;
     TextView text;
     Button num_1;
     Button num_2;
@@ -36,10 +40,8 @@ public class Setting extends Activity
     Button clear;
     Button ok;
     String password="";
-    String tmp_password="";
     String hint="";
-    Vector<Vector<Long>> hold_time=new Vector<Vector<Long>>();
-    Vector<Long> tmp_hold_time=new Vector<Long>();
+    Vector<Long> hold_time=new Vector<Long>();
     long down_time_num_1;
     long down_time_num_2;
     long down_time_num_3;
@@ -50,8 +52,7 @@ public class Setting extends Activity
     long down_time_num_8;
     long down_time_num_9;
     long down_time_num_0;
-    Vector<Vector<Vector<Float>>> pressure=new Vector<Vector<Vector<Float>>>();
-    Vector<Vector<Float>> tmp_pressure=new Vector<Vector<Float>>();
+    Vector<Vector<Float>> pressure=new Vector<Vector<Float>>();
     Vector<Float> pressure_num_1=new Vector<Float>();
     Vector<Float> pressure_num_2=new Vector<Float>();
     Vector<Float> pressure_num_3=new Vector<Float>();
@@ -62,8 +63,7 @@ public class Setting extends Activity
     Vector<Float> pressure_num_8=new Vector<Float>();
     Vector<Float> pressure_num_9=new Vector<Float>();
     Vector<Float> pressure_num_0=new Vector<Float>();
-    Vector<Vector<Vector<Float>>> size=new Vector<Vector<Vector<Float>>>();
-    Vector<Vector<Float>> tmp_size=new Vector<Vector<Float>>();
+    Vector<Vector<Float>> size=new Vector<Vector<Float>>();
     Vector<Float> size_num_1=new Vector<Float>();
     Vector<Float> size_num_2=new Vector<Float>();
     Vector<Float> size_num_3=new Vector<Float>();
@@ -75,13 +75,33 @@ public class Setting extends Activity
     Vector<Float> size_num_9=new Vector<Float>();
     Vector<Float> size_num_0=new Vector<Float>();
 
+    String passwordSaved="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_setting);
-//        startService(new Intent(Setting.this,Launcher.class));
-//        name=(EditText)findViewById(R.id.name);
+        View view=this.getWindow().getDecorView();
+        view.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LOW_PROFILE
+        );
+
+        setContentView(R.layout.activity_lock);
+
+        try {
+            FileInputStream fileInputStream=openFileInput("password");
+            int length=fileInputStream.available();
+            byte bytes[]=new byte[length];
+            fileInputStream.read(bytes);
+            passwordSaved= EncodingUtils.getString(bytes,"UTF-8");
+            Log.d("Lock","password saved : "+passwordSaved);
+            fileInputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            finish();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         text=(TextView)findViewById(R.id.text);
         text.setText("请输入密码");
         num_1=(Button)findViewById(R.id.num_1);
@@ -203,54 +223,54 @@ public class Setting extends Activity
         else if(event.getActionMasked()==MotionEvent.ACTION_UP){
             switch (v.getId()){
                 case R.id.num_1:
-                    tmp_hold_time.add(SystemClock.uptimeMillis()-down_time_num_1);
-                    tmp_pressure.add(pressure_num_1);
-                    tmp_size.add(size_num_1);
+                    hold_time.add(SystemClock.uptimeMillis()-down_time_num_1);
+                    pressure.add(pressure_num_1);
+                    size.add(size_num_1);
                     break;
                 case R.id.num_2:
-                    tmp_hold_time.add(SystemClock.uptimeMillis()-down_time_num_2);
-                    tmp_pressure.add(pressure_num_2);
-                    tmp_size.add(size_num_2);
+                    hold_time.add(SystemClock.uptimeMillis()-down_time_num_2);
+                    pressure.add(pressure_num_2);
+                    size.add(size_num_2);
                     break;
                 case R.id.num_3:
-                    tmp_hold_time.add(SystemClock.uptimeMillis()-down_time_num_3);
-                    tmp_pressure.add(pressure_num_3);
-                    tmp_size.add(size_num_3);
+                    hold_time.add(SystemClock.uptimeMillis()-down_time_num_3);
+                    pressure.add(pressure_num_3);
+                    size.add(size_num_3);
                     break;
                 case R.id.num_4:
-                    tmp_hold_time.add(SystemClock.uptimeMillis()-down_time_num_4);
-                    tmp_pressure.add(pressure_num_4);
-                    tmp_size.add(size_num_4);
+                    hold_time.add(SystemClock.uptimeMillis()-down_time_num_4);
+                    pressure.add(pressure_num_4);
+                    size.add(size_num_4);
                     break;
                 case R.id.num_5:
-                    tmp_hold_time.add(SystemClock.uptimeMillis()-down_time_num_5);
-                    tmp_pressure.add(pressure_num_5);
-                    tmp_size.add(size_num_5);
+                    hold_time.add(SystemClock.uptimeMillis()-down_time_num_5);
+                    pressure.add(pressure_num_5);
+                    size.add(size_num_5);
                     break;
                 case R.id.num_6:
-                    tmp_hold_time.add(SystemClock.uptimeMillis()-down_time_num_6);
-                    tmp_pressure.add(pressure_num_6);
-                    tmp_size.add(size_num_6);
+                    hold_time.add(SystemClock.uptimeMillis()-down_time_num_6);
+                    pressure.add(pressure_num_6);
+                    size.add(size_num_6);
                     break;
                 case R.id.num_7:
-                    tmp_hold_time.add(SystemClock.uptimeMillis()-down_time_num_7);
-                    tmp_pressure.add(pressure_num_7);
-                    tmp_size.add(size_num_7);
+                    hold_time.add(SystemClock.uptimeMillis()-down_time_num_7);
+                    pressure.add(pressure_num_7);
+                    size.add(size_num_7);
                     break;
                 case R.id.num_8:
-                    tmp_hold_time.add(SystemClock.uptimeMillis()-down_time_num_8);
-                    tmp_pressure.add(pressure_num_8);
-                    tmp_size.add(size_num_8);
+                    hold_time.add(SystemClock.uptimeMillis()-down_time_num_8);
+                    pressure.add(pressure_num_8);
+                    size.add(size_num_8);
                     break;
                 case R.id.num_9:
-                    tmp_hold_time.add(SystemClock.uptimeMillis()-down_time_num_9);
-                    tmp_pressure.add(pressure_num_9);
-                    tmp_size.add(size_num_9);
+                    hold_time.add(SystemClock.uptimeMillis()-down_time_num_9);
+                    pressure.add(pressure_num_9);
+                    size.add(size_num_9);
                     break;
                 case R.id.num_0:
-                    tmp_hold_time.add(SystemClock.uptimeMillis()-down_time_num_0);
-                    tmp_pressure.add(pressure_num_0);
-                    tmp_size.add(size_num_0);
+                    hold_time.add(SystemClock.uptimeMillis()-down_time_num_0);
+                    pressure.add(pressure_num_0);
+                    size.add(size_num_0);
                     break;
             }
         }
@@ -305,102 +325,84 @@ public class Setting extends Activity
         switch (v.getId()){
             case R.id.num_1:
                 text.setText(hint+="*");
-                tmp_password+="1";
+                password+="1";
                 break;
             case R.id.num_2:
                 text.setText(hint+="*");
-                tmp_password+="2";
+                password+="2";
                 break;
             case R.id.num_3:
                 text.setText(hint+="*");
-                tmp_password+="3";
+                password+="3";
                 break;
             case R.id.num_4:
                 text.setText(hint+="*");
-                tmp_password+="4";
+                password+="4";
                 break;
             case R.id.num_5:
                 text.setText(hint+="*");
-                tmp_password+="5";
+                password+="5";
                 break;
             case R.id.num_6:
                 text.setText(hint+="*");
-                tmp_password+="6";
+                password+="6";
                 break;
             case R.id.num_7:
                 text.setText(hint+="*");
-                tmp_password+="7";
+                password+="7";
                 break;
             case R.id.num_8:
                 text.setText(hint+="*");
-                tmp_password+="8";
+                password+="8";
                 break;
             case R.id.num_9:
                 text.setText(hint+="*");
-                tmp_password+="9";
+                password+="9";
                 break;
             case R.id.num_0:
                 text.setText(hint+="*");
-                tmp_password+="0";
+                password+="0";
                 break;
             case R.id.clear:
                 text.setText("请重新输入");
                 hint="";
-                tmp_password="";
-                tmp_hold_time=new Vector<Long>();
-                tmp_pressure=new Vector<Vector<Float>>();
-                tmp_size=new Vector<Vector<Float>>();
+                password="";
+                hold_time=new Vector<Long>();
+                pressure=new Vector<Vector<Float>>();
+                size=new Vector<Vector<Float>>();
                 break;
             case R.id.ok:
-                Log.d("Setting","tmp_password : "+tmp_password);
-                if (count==0)
-                    password=tmp_password;
-                if (tmp_password.equals(password)){
-                    text.setText("请再次输入");
-                    Log.d("Setting","tmp_hold_time : "+tmp_hold_time.toString());
-                    hold_time.add(tmp_hold_time);
-                    Log.d("Setting","tmp_pressure : "+tmp_pressure.toString());
-                    pressure.add(tmp_pressure);
-                    Log.d("Setting","tmp_size : "+tmp_size.toString());
-                    size.add(tmp_size);
-                    ++count;
-                }else{
-                    text.setText("输入错误");
-                }
-                hint="";
-                tmp_password="";
-                tmp_hold_time=new Vector<Long>();
-                tmp_pressure=new Vector<Vector<Float>>();
-                tmp_size=new Vector<Vector<Float>>();
-//                Thread thread=new Thread(this);
-//                thread.start();
-//                try {
-//                    thread.join();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-                if (count==5){
-                    try {
-                        FileOutputStream fileOutputStream = openFileOutput("password",MODE_PRIVATE);
-                        fileOutputStream.write(password.getBytes());
-                        fileOutputStream.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    setResult(RESULT_OK);
+                Log.d("Lock","password : "+password);
+                if (password.equals(passwordSaved)) {
                     finish();
+                }else{
+                    text.setText("请再次输入");
+                    Log.d("Lock", "hold_time : " + hold_time.toString());
+                    Log.d("Lock", "pressure : " + pressure.toString());
+                    Log.d("Lock", "size : " + size.toString());
+                    hint="";
+                    password="";
+                    hold_time=new Vector<Long>();
+                    pressure=new Vector<Vector<Float>>();
+                    size=new Vector<Vector<Float>>();
                 }
                 break;
         }
     }
 
     @Override
-    protected void onDestroy (){
-        super.onDestroy();
-        setResult(RESULT_CANCELED);
+    public boolean onKeyDown(int keyCode,KeyEvent event){
+        Log.d("Lock","keyCode : "+ Integer.toString(keyCode));
+        switch (keyCode){
+            case KeyEvent.KEYCODE_BACK:
+                return true;
+            case KeyEvent.KEYCODE_HOME:
+                return true;
+        }
+        return false;
     }
+
+
 //    @Override
 //    public void run(){
 //        try {

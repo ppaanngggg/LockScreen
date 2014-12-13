@@ -2,22 +2,24 @@
 <resources>
 
     <string name="app_name">LockScreen</string>
-    <string name="hint">password</string>
+    <!-- <string name="hint">password</string> -->
     <string name="action_settings">Settings</string>
     <string name="name">name</string>
-
-    <string name="num_1">1</string>
-    <string name="num_2">2</string>
-    <string name="num_3">3</string>
-    <string name="num_4">4</string>
-    <string name="num_5">5</string>
-    <string name="num_6">6</string>
-    <string name="num_7">7</string>
-    <string name="num_8">8</string>
-    <string name="num_9">9</string>
-    <string name="num_0">0</string>
-    
-    <string name="clear">clear</string>
-    <string name="ok">OK</string>
+    <string name="num_1"><u>\u0020 1 \u0020</u></string>
+    <string name="num_2"><u>\u0020 2 \u0020</u></string>
+    <string name="num_3"><u>\u0020 3 \u0020</u></string>
+    <string name="num_4"><u>\u0020 4 \u0020</u></string>
+    <string name="num_5"><u>\u0020 5 \u0020</u></string>
+    <string name="num_6"><u>\u0020 6 \u0020</u></string>
+    <string name="num_7"><u>\u0020 7 \u0020</u></string>
+    <string name="num_8"><u>\u0020 8 \u0020</u></string>
+    <string name="num_9"><u>\u0020 9 \u0020</u></string>
+    <string name="num_0"><u>\u0020 0 \u0020</u></string>
+    <string name="clear">清除</string>
+    <string name="ok">确认</string>
+    <string name="title_activity_main">Main</string>
+    <string name="main_hint">锁屏已启用！</string>
+    <string name="reset">重设密码</string>
+    <string name="title_activity_lock">Lock</string>
 
 </resources>
