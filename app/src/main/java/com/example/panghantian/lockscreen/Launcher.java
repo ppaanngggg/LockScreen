@@ -25,6 +25,16 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.StreamCorruptedException;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 import java.util.Vector;
 
 /**
@@ -36,6 +46,7 @@ public class Launcher extends Service implements View.OnClickListener,View.OnTou
     RelativeLayout relativeLayout;
     TextView text;
     String password;
+    String password_saved;
     String hint;
     Vector<Long> hold_time;
     long down_time[];
@@ -46,6 +57,8 @@ public class Launcher extends Service implements View.OnClickListener,View.OnTou
     Button nums[]=null;
     ImageButton clear;
     ImageButton ok;
+    Vector<Float> upLimit;
+    Vector<Float> downLimit;
 
     @Override
     public IBinder onBind(Intent intent){
@@ -231,6 +244,37 @@ public class Launcher extends Service implements View.OnClickListener,View.OnTou
     }
 
     private void launchLock(){
+
+        try {
+            FileInputStream fileInputStream=openFileInput("password");
+            ObjectInputStream objectInputStream=new ObjectInputStream(fileInputStream);
+
+            password_saved=(String)objectInputStream.readObject();
+            upLimit=(Vector<Float>)objectInputStream.readObject();
+            downLimit=(Vector<Float>)objectInputStream.readObject();
+
+            Log.d("password_saved",password_saved);
+            Log.d("upLimit",upLimit.toString());
+            Log.d("downLimit",downLimit.toString());
+
+            objectInputStream.close();
+            fileInputStream.close();
+        } catch (FileNotFoundException e) {
+            Log.d("window manager", "file not found");
+            try{
+                windowManager.removeView(relativeLayout);
+            }catch (IllegalArgumentException e1){
+                Log.d("window manager","has no layout");
+            }
+            return;
+        } catch (StreamCorruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
         password="";
         hint="";
         hold_time=new Vector<Long>();
@@ -264,7 +308,51 @@ public class Launcher extends Service implements View.OnClickListener,View.OnTou
             Log.d("hold time",hold_time.toString());
             Log.d("pressure",pressure.toString());
             Log.d("size",size.toString());
-            windowManager.removeView(relativeLayout);
+            try {
+                byte[] bytes = password.getBytes("UTF-8");
+                MessageDigest md=MessageDigest.getInstance("MD5");
+                bytes=md.digest(bytes);
+                password=new String(bytes);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            Vector<Float> vec=new Vector<Float>();
+            for (long value:hold_time){
+                vec.add((float) value);
+            }
+            for (Vector<Float> values:pressure){
+                vec.add(Collections.max(values));
+            }
+            for (Vector<Float> values:size){
+                vec.add(Collections.max(values));
+            }
+            Log.d("vec",vec.toString());
+            Log.d("MD5",password);
+            boolean quit=true;
+            if (password.equals(password_saved)){
+                int score=0;
+                for (int i=0;i<vec.size();i++){
+                    if (vec.elementAt(i)<upLimit.elementAt(i) && vec.elementAt(i)>downLimit.elementAt(i))
+                        score+=1;
+                }
+                Log.d("score",Integer.toString(score));
+                if (score<0.5*vec.size())
+                    quit=false;
+            }else{
+                quit=false;
+            }
+            if (quit)
+                windowManager.removeView(relativeLayout);
+            else{
+                text.setText("输入错误！");
+                hint="";
+                password="";
+                hold_time=new Vector<Long>();
+                pressure=new Vector<Vector<Float>>();
+                size=new Vector<Vector<Float>>();
+            }
         }else if (id==R.id.clear){
             text.setText("请重新输入");
             hint="";

@@ -39,6 +39,7 @@ public class Main extends Activity {
             e.printStackTrace();
             Log.d("Main","file not found");
             startActivityForResult(new Intent(Main.this, Setting.class), mRequestCode);
+            startService(new Intent(Main.this, Launcher.class));
         } catch (IOException e) {
             e.printStackTrace();
         }

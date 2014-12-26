@@ -17,7 +17,7 @@
     <string name="num_0">\u0020 0 \u0020</string>
     <string name="clear">清除</string>
     <string name="ok">确认</string>
-    <string name="title_activity_main">Main</string>
+    <string name="title_activity_main">LockScreen</string>
     <string name="main_hint">锁屏已启用！</string>
     <string name="reset">重设密码</string>
     <string name="title_activity_lock">Lock</string>

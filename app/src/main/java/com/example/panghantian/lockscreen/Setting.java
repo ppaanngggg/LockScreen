@@ -19,6 +19,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 import java.util.Vector;
 
 public class Setting extends Activity
@@ -85,7 +88,7 @@ public class Setting extends Activity
 //        startService(new Intent(Setting.this,Launcher.class));
 //        name=(EditText)findViewById(R.id.name);
         text=(TextView)findViewById(R.id.text);
-        text.setText("请输入密码");
+        text.setText("请设置密码");
         num_1=(Button)findViewById(R.id.num_1);
         num_2=(Button)findViewById(R.id.num_2);
         num_3=(Button)findViewById(R.id.num_3);
@@ -381,13 +384,68 @@ public class Setting extends Activity
                         Log.d("Holding Time",hold_time.toString());
                         Log.d("Pressure",pressure.toString());
                         Log.d("Size",size.toString());
+
+                        Vector<Vector<Float>> vecs=new Vector<Vector<Float>>();
+                        for (int i=0;i<count;i++){
+                            Vector<Float> vec=new Vector<Float>();
+                            for (int j=0;j<hold_time.elementAt(i).size();j++){
+                                float value=hold_time.elementAt(i).elementAt(j);
+                                vec.add(value);
+                            }
+                            for (int j=0;j<pressure.elementAt(i).size();j++){
+                                float value= Collections.max(pressure.elementAt(i).elementAt(j));
+                                vec.add(value);
+                            }
+                            for (int j=0;j<size.elementAt(i).size();j++){
+                                float value= Collections.max(size.elementAt(i).elementAt(j));
+                                vec.add(value);
+                            }
+                            Log.d("vec "+Integer.toString(i),vec.toString());
+                            vecs.add(vec);
+                        }
+
+                        //0.20:0.941 0.15:1.190 0.10:1.5332 0.05:2.1318 0.025:2.7764 0.01:3.7469 0.005:4.6041
+                        double t=3.7469;
+                        double sqrt_n=Math.sqrt(count);
+                        Vector<Float> downLimit=new Vector<Float>();
+                        Vector<Float> upLimit=new Vector<Float>();
+                        for (int i=0;i<vecs.elementAt(0).size();i++){
+                            double mean=0.f;
+                            double dev=0.f;
+                            for (int j=0;j<vecs.size();j++){
+                                mean+=vecs.elementAt(j).elementAt(i);
+                                dev+=vecs.elementAt(j).elementAt(i)*vecs.elementAt(j).elementAt(i);
+                            }
+                            mean/=(float)count;
+                            dev-=count*mean*mean;
+                            dev/=(float)(count-1);
+                            dev=Math.sqrt(dev);
+                            upLimit.add((float)(mean+dev*t/sqrt_n));
+                            downLimit.add((float) (mean - dev * t / sqrt_n));
+                        }
+                        Log.d("upLimit",upLimit.toString());
+                        Log.d("downLimit",downLimit.toString());
+
+                        byte[] bytes=password.getBytes("UTF-8");
+                        MessageDigest md=MessageDigest.getInstance("MD5");
+                        bytes=md.digest(bytes);
+                        password=new String(bytes);
+                        Log.d("MD5",password);
+
                         FileOutputStream fileOutputStream = openFileOutput("password",MODE_PRIVATE);
                         ObjectOutputStream objectOutputStream=new ObjectOutputStream(fileOutputStream);
-                        
+
+                        objectOutputStream.writeObject(password);
+                        objectOutputStream.writeObject(upLimit);
+                        objectOutputStream.writeObject(downLimit);
+
+                        objectOutputStream.close();
                         fileOutputStream.close();
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (NoSuchAlgorithmException e) {
                         e.printStackTrace();
                     }
                     setResult(RESULT_OK);
