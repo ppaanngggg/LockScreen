@@ -27,7 +27,7 @@ public class Main extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        startActivityForResult(new Intent(Main.this, Setting.class), mRequestCode);
+                        startActivityForResult(new Intent(Main.this, Setting.class), mRequestCode);
                     }
                 }
         );
@@ -38,7 +38,7 @@ public class Main extends Activity {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Log.d("Main","file not found");
-//            startActivityForResult(new Intent(Main.this, Setting.class), mRequestCode);
+            startActivityForResult(new Intent(Main.this, Setting.class), mRequestCode);
         } catch (IOException e) {
             e.printStackTrace();
         }

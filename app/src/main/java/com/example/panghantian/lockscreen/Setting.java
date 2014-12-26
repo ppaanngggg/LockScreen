@@ -11,12 +11,14 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Vector;
 
 public class Setting extends Activity
@@ -33,8 +35,8 @@ public class Setting extends Activity
     Button num_8;
     Button num_9;
     Button num_0;
-    Button clear;
-    Button ok;
+    ImageButton clear;
+    ImageButton ok;
     String password="";
     String tmp_password="";
     String hint="";
@@ -94,8 +96,8 @@ public class Setting extends Activity
         num_8=(Button)findViewById(R.id.num_8);
         num_9=(Button)findViewById(R.id.num_9);
         num_0=(Button)findViewById(R.id.num_0);
-        clear=(Button)findViewById(R.id.clear);
-        ok=(Button)findViewById(R.id.ok);
+        clear=(ImageButton)findViewById(R.id.clear);
+        ok=(ImageButton)findViewById(R.id.ok);
 
         num_1.setOnClickListener(this);
         num_2.setOnClickListener(this);
@@ -372,17 +374,16 @@ public class Setting extends Activity
                 tmp_hold_time=new Vector<Long>();
                 tmp_pressure=new Vector<Vector<Float>>();
                 tmp_size=new Vector<Vector<Float>>();
-//                Thread thread=new Thread(this);
-//                thread.start();
-//                try {
-//                    thread.join();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
+
                 if (count==5){
                     try {
+                        Log.d("Password",password);
+                        Log.d("Holding Time",hold_time.toString());
+                        Log.d("Pressure",pressure.toString());
+                        Log.d("Size",size.toString());
                         FileOutputStream fileOutputStream = openFileOutput("password",MODE_PRIVATE);
-                        fileOutputStream.write(password.getBytes());
+                        ObjectOutputStream objectOutputStream=new ObjectOutputStream(fileOutputStream);
+                        
                         fileOutputStream.close();
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -401,19 +402,4 @@ public class Setting extends Activity
         super.onDestroy();
         setResult(RESULT_CANCELED);
     }
-//    @Override
-//    public void run(){
-//        try {
-//            Socket socket=new Socket("115.29.168.27",9000);
-//            OutputStream outputStream=socket.getOutputStream();
-//            ObjectOutputStream objectOutputStream=new ObjectOutputStream(outputStream);
-//            objectOutputStream.writeObject(name.getText().toString());
-//            objectOutputStream.writeObject(password);
-//            objectOutputStream.writeObject(hold_time);
-//            objectOutputStream.writeObject(pressure);
-//            objectOutputStream.writeObject(size);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 }
