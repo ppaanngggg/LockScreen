@@ -405,7 +405,7 @@ public class Setting extends Activity
                         }
 
                         //0.20:0.941 0.15:1.190 0.10:1.5332 0.05:2.1318 0.025:2.7764 0.01:3.7469 0.005:4.6041
-                        double t=3.7469;
+                        double t=4.6041;
                         double sqrt_n=Math.sqrt(count);
                         Vector<Float> downLimit=new Vector<Float>();
                         Vector<Float> upLimit=new Vector<Float>();

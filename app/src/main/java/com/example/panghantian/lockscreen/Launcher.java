@@ -338,7 +338,7 @@ public class Launcher extends Service implements View.OnClickListener,View.OnTou
                         score+=1;
                 }
                 Log.d("score",Integer.toString(score));
-                if (score<0.5*vec.size())
+                if (score<0.85*vec.size())
                     quit=false;
             }else{
                 quit=false;
