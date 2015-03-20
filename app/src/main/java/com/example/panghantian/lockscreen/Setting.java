@@ -306,6 +306,8 @@ public class Setting extends Activity
     }
 
     @Override
+    //设置时候输入五遍密码
+    //文本框多一个*，tmp_password记录当前次密码
     public  void onClick(View v){
         switch (v.getId()){
             case R.id.num_1:
@@ -358,50 +360,50 @@ public class Setting extends Activity
                 break;
             case R.id.ok:
                 Log.d("Setting","tmp_password : "+tmp_password);
-                if (count==0)
-                    password=tmp_password;
+                if (count==0)//第一次输入
+                    password=tmp_password;//记录第一次输入的密码
                 if (tmp_password.equals(password)){
-                    text.setText("请再次输入");
+                    text.setText("请再次输入");//之前输入没问题
                     Log.d("Setting","tmp_hold_time : "+tmp_hold_time.toString());
-                    hold_time.add(tmp_hold_time);
+                    hold_time.add(tmp_hold_time);//记录持续时间
                     Log.d("Setting","tmp_pressure : "+tmp_pressure.toString());
-                    pressure.add(tmp_pressure);
+                    pressure.add(tmp_pressure);//记录压力
                     Log.d("Setting","tmp_size : "+tmp_size.toString());
-                    size.add(tmp_size);
+                    size.add(tmp_size);//记录面积
                     ++count;
                 }else{
-                    text.setText("输入错误");
+                    text.setText("输入错误");//tmp_password.equals(password) 为 F
                 }
                 hint="";
                 tmp_password="";
                 tmp_hold_time=new Vector<Long>();
                 tmp_pressure=new Vector<Vector<Float>>();
-                tmp_size=new Vector<Vector<Float>>();
+                tmp_size=new Vector<Vector<Float>>();//二维数组？
 
                 if (count==5){
                     try {
                         Log.d("Password",password);
-                        Log.d("Holding Time",hold_time.toString());
-                        Log.d("Pressure",pressure.toString());
-                        Log.d("Size",size.toString());
+                        Log.d("Holding Time",hold_time.toString());//持续时间
+                        Log.d("Pressure",pressure.toString());//压力
+                        Log.d("Size",size.toString());//面积？
 
                         Vector<Vector<Float>> vecs=new Vector<Vector<Float>>();
                         for (int i=0;i<count;i++){
                             Vector<Float> vec=new Vector<Float>();
                             for (int j=0;j<hold_time.elementAt(i).size();j++){
                                 float value=hold_time.elementAt(i).elementAt(j);
-                                vec.add(value);
+                                vec.add(value);//vec是某行的持续时间
                             }
                             for (int j=0;j<pressure.elementAt(i).size();j++){
                                 float value= Collections.max(pressure.elementAt(i).elementAt(j));
-                                vec.add(value);
+                                vec.add(value);//持续时间 再加上 压力
                             }
                             for (int j=0;j<size.elementAt(i).size();j++){
                                 float value= Collections.max(size.elementAt(i).elementAt(j));
-                                vec.add(value);
+                                vec.add(value);//持续时间 再加上 压力 再加上 面积
                             }
                             Log.d("vec "+Integer.toString(i),vec.toString());
-                            vecs.add(vec);
+                            vecs.add(vec);//vecs是所有行的 持续时间 压力 面积 ，唔，好大一个特征数组
                         }
 
                         //0.20:0.941 0.15:1.190 0.10:1.5332 0.05:2.1318 0.025:2.7764 0.01:3.7469 0.005:4.6041
