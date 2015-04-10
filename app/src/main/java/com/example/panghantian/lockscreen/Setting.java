@@ -384,7 +384,7 @@ public class Setting extends Activity
                         Log.d("Holding Time",hold_time.toString());
                         Log.d("Pressure",pressure.toString());
                         Log.d("Size",size.toString());
-
+                        //store all vecs
                         Vector<Vector<Float>> vecs=new Vector<Vector<Float>>();
                         for (int i=0;i<count;i++){
                             Vector<Float> vec=new Vector<Float>();
@@ -400,44 +400,94 @@ public class Setting extends Activity
                                 float value= Collections.max(size.elementAt(i).elementAt(j));
                                 vec.add(value);
                             }
-                            Log.d("vec "+Integer.toString(i),vec.toString());
                             vecs.add(vec);
                         }
-
-                        //0.20:0.941 0.15:1.190 0.10:1.5332 0.05:2.1318 0.025:2.7764 0.01:3.7469 0.005:4.6041
-                        double t=4.6041;
-                        double sqrt_n=Math.sqrt(count);
-                        Vector<Float> downLimit=new Vector<Float>();
-                        Vector<Float> upLimit=new Vector<Float>();
+                        Log.d("vecs ",vecs.toString());
+                        //compute vec means
+                        Vector<Float> means=new Vector<Float>();
                         for (int i=0;i<vecs.elementAt(0).size();i++){
-                            double mean=0.f;
-                            double dev=0.f;
+                            float sum=0;
                             for (int j=0;j<vecs.size();j++){
-                                mean+=vecs.elementAt(j).elementAt(i);
-                                dev+=vecs.elementAt(j).elementAt(i)*vecs.elementAt(j).elementAt(i);
+                                sum+=vecs.elementAt(j).elementAt(i);
                             }
-                            mean/=(float)count;
-                            dev-=count*mean*mean;
-                            dev/=(float)(count-1);
-                            dev=Math.sqrt(dev);
-                            upLimit.add((float)(mean+dev*t/sqrt_n));
-                            downLimit.add((float) (mean - dev * t / sqrt_n));
+                            means.add(sum/vecs.size());
                         }
-                        Log.d("upLimit",upLimit.toString());
-                        Log.d("downLimit",downLimit.toString());
+                        Log.d("means ",means.toString());
+                        //compute vec sigmas
+                        Vector<Float> sigmas=new Vector<Float>();
+                        for (int i=0;i<vecs.elementAt(0).size();i++){
+                            float sum=0;
+                            for (int j=0;j<vecs.size();j++){
+                                sum+=(vecs.elementAt(j).elementAt(i)-means.elementAt(i))*
+                                        (vecs.elementAt(j).elementAt(i)-means.elementAt(i));
+                            }
+                            sum/=vecs.size();
+                            if (sum==0){
+                                sigmas.add((float) 0);
+                            }else{
+                                sigmas.add(1/sum);
+                            }
+                        }
+                        Log.d("sigmas ",sigmas.toString());
+                        int interval=sigmas.size()/3;
+                        Vector<Float> sigma_hold_time=new Vector<Float>();
+                        for (int i=0;i<interval;i++)
+                            sigma_hold_time.add(sigmas.elementAt(i));
+                        Vector<Float> sigma_pressure=new Vector<Float>();
+                        for (int i=interval;i<2*interval;i++)
+                            sigma_pressure.add(sigmas.elementAt(i));
+                        Vector<Float> sigma_size=new Vector<Float>();
+                        for (int i=2*interval;i<3*interval;i++)
+                            sigma_size.add(sigmas.elementAt(i));
+                        Log.d("sigma_hold_time ",sigma_hold_time.toString());
+                        Log.d("sigma_pressure ",sigma_pressure.toString());
+                        Log.d("sigma_size ",sigma_size.toString());
+                        float max_sigma_hold_time=Collections.max(sigma_hold_time);
+                        float max_sigma_pressure=Collections.max(sigma_pressure);
+                        float max_sigma_size=Collections.max(sigma_size);
+                        for (int i=0;i<interval;i++){
+                            if (sigmas.elementAt(i)==0){
+                                sigmas.set(i,1/max_sigma_hold_time);
+                            }else{
+                                sigmas.set(i,1/sigmas.elementAt(i));
+                            }
+                        }
+                        for (int i=interval;i<2*interval;i++){
+                            if (sigmas.elementAt(i)==0){
+                                sigmas.set(i,1/max_sigma_pressure);
+                            }else{
+                                sigmas.set(i,1/sigmas.elementAt(i));
+                            }
+                        }
+                        for (int i=2*interval;i<3*interval;i++){
+                            if (sigmas.elementAt(i)==0){
+                                sigmas.set(i,1/max_sigma_size);
+                            }else{
+                                sigmas.set(i,1/sigmas.elementAt(i));
+                            }
+                        }
+                        Log.d("sigmas ",sigmas.toString());
+                        //!!! set H_2/sigmas
+                        float scale=(float)1;
+                        Vector<Float> H_2=new Vector<Float>();
+                        for (int i=0;i<sigmas.size();i++){
+                            H_2.add(scale*sigmas.elementAt(i));
+                        }
+                        Log.d("H_2 ",H_2.toString());
 
+                        //turn password into md5
                         byte[] bytes=password.getBytes("UTF-8");
                         MessageDigest md=MessageDigest.getInstance("MD5");
                         bytes=md.digest(bytes);
                         password=new String(bytes);
                         Log.d("MD5",password);
-
+                        //store password, vecs and H_2 into file
                         FileOutputStream fileOutputStream = openFileOutput("password",MODE_PRIVATE);
                         ObjectOutputStream objectOutputStream=new ObjectOutputStream(fileOutputStream);
 
                         objectOutputStream.writeObject(password);
-                        objectOutputStream.writeObject(upLimit);
-                        objectOutputStream.writeObject(downLimit);
+                        objectOutputStream.writeObject(vecs);
+                        objectOutputStream.writeObject(H_2);
 
                         objectOutputStream.close();
                         fileOutputStream.close();

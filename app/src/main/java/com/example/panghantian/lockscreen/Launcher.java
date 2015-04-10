@@ -53,8 +53,8 @@ public class Launcher extends Service implements View.OnClickListener,View.OnTou
     Button nums[]=null;
     ImageButton clear;
     ImageButton ok;
-    Vector<Float> upLimit;
-    Vector<Float> downLimit;
+    Vector<Vector<Float>> vecs;
+    Vector<Float> H_2;
 
     @Override
     public IBinder onBind(Intent intent){
@@ -240,18 +240,18 @@ public class Launcher extends Service implements View.OnClickListener,View.OnTou
     }
 
     private void launchLock(){
-
         try {
+            //load password and vecs from file
             FileInputStream fileInputStream=openFileInput("password");
             ObjectInputStream objectInputStream=new ObjectInputStream(fileInputStream);
 
             password_saved=(String)objectInputStream.readObject();
-            upLimit=(Vector<Float>)objectInputStream.readObject();
-            downLimit=(Vector<Float>)objectInputStream.readObject();
+            vecs=(Vector<Vector<Float>>)objectInputStream.readObject();
+            H_2=(Vector<Float>)objectInputStream.readObject();
 
             Log.d("password_saved",password_saved);
-            Log.d("upLimit",upLimit.toString());
-            Log.d("downLimit",downLimit.toString());
+            Log.d("vecs",vecs.toString());
+            Log.d("H_2",H_2.toString());
 
             objectInputStream.close();
             fileInputStream.close();
@@ -305,6 +305,7 @@ public class Launcher extends Service implements View.OnClickListener,View.OnTou
             Log.d("pressure",pressure.toString());
             Log.d("size",size.toString());
             try {
+                //turn password to md5
                 byte[] bytes = password.getBytes("UTF-8");
                 MessageDigest md=MessageDigest.getInstance("MD5");
                 bytes=md.digest(bytes);
@@ -327,21 +328,38 @@ public class Launcher extends Service implements View.OnClickListener,View.OnTou
             Log.d("vec",vec.toString());
             Log.d("MD5",password);
             boolean quit=true;
+            //if password is equal
+            Vector<Float> probs=new Vector<Float>();
             if (password.equals(password_saved)){
-                int score=0;
-                for (int i=0;i<vec.size();i++){
-                    if (vec.elementAt(i)<upLimit.elementAt(i) && vec.elementAt(i)>downLimit.elementAt(i))
-                        score+=1;
+                for (int i=0;i<H_2.size();i++){
+                    float p=0;
+                    for (int j=0;j<vecs.size();j++){
+                        //np.exp(-1./2.*(v_test[i]-v_train[i])**2/H_2[i])
+                        p+=Math.exp(-1./2.*
+                                (vec.elementAt(i)-vecs.elementAt(j).elementAt(i))*
+                                (vec.elementAt(i)-vecs.elementAt(j).elementAt(i))/
+                                H_2.elementAt(i)
+                        );
+                    }
+                    p/=vecs.size();
+                    probs.add(p*p);
                 }
-                Log.d("score",Integer.toString(score));
-                if (score<0.6*vec.size())
+                Log.d("probs ",probs.toString());
+                Float sum_probs= new Float(0);
+                for (int i=0;i<probs.size()/3*2;i++){
+                    sum_probs+=probs.elementAt(i);
+                }
+                Log.d("sum_probs ",sum_probs.toString());
+                if (sum_probs<0.25*probs.size()/3*2)
                     quit=false;
+
             }else{
                 quit=false;
             }
             if (quit)
                 windowManager.removeView(relativeLayout);
             else{
+                //if fail, then init
                 text.setText("输入错误！");
                 hint="";
                 password="";
