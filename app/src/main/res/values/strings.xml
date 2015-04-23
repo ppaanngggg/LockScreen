@@ -21,5 +21,7 @@
     <string name="main_hint">锁屏已启用！</string>
     <string name="reset">重设密码</string>
     <string name="title_activity_lock">Lock</string>
+    <string name="close_lock">停止锁屏</string>
+    <string name="stop_lock">已停止锁屏！</string>
 
 </resources>

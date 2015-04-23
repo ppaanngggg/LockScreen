@@ -85,7 +85,12 @@ public class Launcher extends Service implements View.OnClickListener,View.OnTou
     @Override
     public void onDestroy(){
         unregisterReceiver(screenReceiver);
-        startActivity(new Intent(Launcher.this,Launcher.class));
+        Log.d("Service","Service stop!!!");
+//        startActivity(new Intent(Launcher.this,Launcher.class));
+//        KeyguardManager.KeyguardLock keyguardLock;
+//        KeyguardManager keyguardManager=(KeyguardManager)getSystemService(KEYGUARD_SERVICE);
+//        keyguardLock=keyguardManager.newKeyguardLock("");
+//        keyguardLock.reenableKeyguard();
         super.onDestroy();
 
     }

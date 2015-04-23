@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,12 +23,25 @@ public class Main extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button button=(Button)findViewById(R.id.reset);
-        button.setOnClickListener(
+        Button reset_button=(Button)findViewById(R.id.reset);
+        reset_button.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         startActivityForResult(new Intent(Main.this, Setting.class), mRequestCode);
+                    }
+                }
+        );
+        Button close_lock_button=(Button)findViewById(R.id.close_lock);
+        close_lock_button.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        stopService(new Intent(Main.this, Launcher.class));
+                        TextView textView=(TextView)findViewById(R.id.main_hint);
+                        textView.setText(R.string.stop_lock);
+                        android.os.Process.killProcess(android.os.Process.myPid());
+
                     }
                 }
         );

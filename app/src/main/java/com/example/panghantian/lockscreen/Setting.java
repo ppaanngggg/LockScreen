@@ -468,7 +468,7 @@ public class Setting extends Activity
                         }
                         Log.d("sigmas ",sigmas.toString());
                         //!!! set H_2/sigmas
-                        float scale=(float)1;
+                        float scale=(float)1.4;
                         Vector<Float> H_2=new Vector<Float>();
                         for (int i=0;i<sigmas.size();i++){
                             H_2.add(scale*sigmas.elementAt(i));

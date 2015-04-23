@@ -14,7 +14,16 @@
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <TextView android:text="@string/main_hint"
+    <Button
+        android:id="@+id/close_lock"
+        android:text="@string/close_lock"
+        android:layout_below="@+id/reset"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/main_hint"
+        android:text="@string/main_hint"
         android:layout_centerHorizontal="true"
         android:layout_above="@id/reset"
         android:textSize="30sp"
